@@ -12,18 +12,18 @@ read -r -p "Do you wish to setup this machine for work? [y/N]: " WORK_COMPUTER;
 
 # Setup XCode first
 if ! xcode-select -p | grep -q "/Library/Developer/CommandLineTools"; then
-  xcode-select --install
 
-  sleep 1
+  check=$(xcode-select --install 2>&1)
 
-  check=$((xcode-select --install) 2>&1)
   echo $check
+
   str="xcode-select: note: install requested for command line developer tools"
+
   while [[ "$check" == "$str" ]];
   do
-    sleep 1
+    echo "Installing...."
+    sleep 3
   done
-
 fi
 
 mkdir -p $HOME/code/samdunne
