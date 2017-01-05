@@ -13,6 +13,27 @@ read -r -p "Do you wish to setup this machine for work? [y/N]: " WORK_COMPUTER;
 # Setup XCode first
 if ! xcode-select -p | grep -q "/Library/Developer/CommandLineTools"; then
   xcode-select --install
+
+  sleep 1
+
+osascript <<EOD
+  tell application "System Events"
+    tell process "Install Command Line Developer Tools"
+      keystroke return
+      click button "Agree" of window "License Agreement"
+    end tell
+  end tell
+EOD
+
+  check=$((xcode-\select --install) 2>&1)
+  echo $check
+  str="xcode-select: note: install requested for command line developer tools"
+  while [[ "$check" == "$str" ]];
+  do
+    osascript -e 'tell app "System Events" to display dialog "xcode command-line tools missing." buttons "OK" default button 1 with title "xcode command-line tools"'
+    exit;
+  done
+
 fi
 
 mkdir -p $HOME/code/samdunne
