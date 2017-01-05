@@ -16,22 +16,12 @@ if ! xcode-select -p | grep -q "/Library/Developer/CommandLineTools"; then
 
   sleep 1
 
-osascript <<EOD
-  tell application "System Events"
-    tell process "Install Command Line Developer Tools"
-      keystroke return
-      click button "Agree" of window "License Agreement"
-    end tell
-  end tell
-EOD
-
-  check=$((xcode-\select --install) 2>&1)
+  check=$((xcode-select --install) 2>&1)
   echo $check
   str="xcode-select: note: install requested for command line developer tools"
   while [[ "$check" == "$str" ]];
   do
-    osascript -e 'tell app "System Events" to display dialog "xcode command-line tools missing." buttons "OK" default button 1 with title "xcode command-line tools"'
-    exit;
+    sleep 1
   done
 
 fi
